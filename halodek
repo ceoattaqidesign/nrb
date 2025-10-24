@@ -1,0 +1,2550 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis-in - Platform Kuis Interaktif</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* Modern Color Palette */
+            --primary-gradient-start: #635bff;
+            --primary-gradient-end: #7c3aed;
+            --secondary-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --white-pure: #ffffff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            /* Typography Scale */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.25rem;
+            --text-2xl: 1.5rem;
+            --text-3xl: 1.875rem;
+            --text-4xl: 2.25rem;
+            --text-5xl: 3rem;
+            --text-6xl: 3.75rem;
+            
+            /* Spacing System */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            --radius-full: 9999px;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            /* Z-Index Scale */
+            --z-dropdown: 1000;
+            --z-sticky: 1020;
+            --z-fixed: 1030;
+            --z-modal-backdrop: 1040;
+            --z-modal: 1050;
+            --z-popover: 1060;
+            --z-tooltip: 1070;
+        }
+        
+        html {
+            font-family: var(--font-family);
+            scroll-behavior: smooth;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            color: var(--gray-800);
+            background: var(--white-pure);
+            overflow-x: hidden;
+        }
+        
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            border-radius: var(--radius-full);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #5a52e5, #6d28d9);
+        }
+        
+        /* HERO GRADIENT ANIMATION */
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                var(--primary-gradient-start) 0%, 
+                var(--primary-gradient-end) 25%, 
+                var(--secondary-blue) 50%, 
+                #06b6d4 75%, 
+                var(--accent-green) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* TYPOGRAPHY SYSTEM */
+        .text-hero {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+        }
+        
+        .text-subtitle {
+            font-size: clamp(1.125rem, 4vw, 1.5rem);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+        
+        /* MODERN BUTTON SYSTEM */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            padding: var(--space-4) var(--space-8);
+            font-size: var(--text-base);
+            color: var(--white-pure);
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2xl);
+            background: linear-gradient(135deg, #5a52e5, #6d28d9);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            padding: var(--space-3) var(--space-6);
+            font-size: var(--text-sm);
+            color: var(--gray-700);
+            background: var(--white-pure);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-full);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-ghost {
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--text-sm);
+            color: var(--gray-600);
+            background: transparent;
+            border-radius: var(--radius-lg);
+        }
+        
+        .btn-ghost:hover {
+            background: var(--gray-100);
+            color: var(--gray-800);
+        }
+        
+        /* CARD SYSTEM */
+        .card {
+            background: var(--white-pure);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-100);
+            overflow: hidden;
+        }
+        
+        .card-floating {
+            box-shadow: var(--shadow-2xl);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-interactive {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .card-interactive:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .card-question {
+            border: 2px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .card-question:hover {
+            border-color: var(--primary-gradient-start);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .card-question.selected {
+            border-color: var(--primary-gradient-start);
+            background: linear-gradient(135deg, #f8faff, #f0f4ff);
+        }
+        
+        .card-question.correct {
+            border-color: var(--accent-green);
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+        
+        .card-question.incorrect {
+            border-color: var(--accent-red);
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        }
+        
+        /* GLASS MORPHISM */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* ANIMATIONS */
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(40px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes bounceIn {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.3); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.05); 
+            }
+            70% { 
+                transform: scale(0.9); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+        
+        /* PROGRESS BAR */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            border-radius: var(--radius-full);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* MOBILE NAVIGATION */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* RESPONSIVE UTILITIES */
+        .container-responsive {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+        
+        @media (min-width: 640px) {
+            .container-responsive {
+                padding: 0 var(--space-6);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container-responsive {
+                padding: 0 var(--space-8);
+            }
+        }
+        
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 768px) {
+            .btn-primary {
+                padding: var(--space-3) var(--space-6);
+                font-size: var(--text-sm);
+            }
+            
+            .btn-secondary {
+                padding: var(--space-2) var(--space-4);
+                font-size: var(--text-xs);
+            }
+            
+            .card {
+                margin: var(--space-4);
+                border-radius: var(--space-4);
+            }
+            
+            .text-hero {
+                line-height: 1.2;
+            }
+            
+            .hero-gradient {
+                padding-top: var(--space-20);
+                padding-bottom: var(--space-16);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container-responsive {
+                padding: 0 var(--space-3);
+            }
+            
+            .card {
+                margin: var(--space-3);
+                border-radius: var(--space-3);
+            }
+            
+            .btn {
+                font-size: var(--text-xs);
+            }
+        }
+        
+        /* UTILITY CLASSES */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: transform 0.2s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-4px);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--primary-gradient-start);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* LEADERBOARD STYLES */
+        .leaderboard-item {
+            transition: all 0.3s ease;
+        }
+        
+        .leaderboard-item:hover {
+            background: var(--gray-50);
+            transform: translateX(8px);
+        }
+        
+        .rank-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #92400e; }
+        .rank-2 { background: linear-gradient(135deg, #c0c0c0, #e5e7eb); color: #374151; }
+        .rank-3 { background: linear-gradient(135deg, #cd7f32, #d97706); color: white; }
+        .rank-other { background: linear-gradient(135deg, var(--gray-400), var(--gray-500)); }
+        
+        /* HELP PAGE STYLES */
+        .help-section {
+            scroll-margin-top: 100px;
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            background: var(--gray-50);
+        }
+        
+        .faq-question {
+            cursor: pointer;
+            padding: var(--space-6);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 var(--space-6) var(--space-6);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full"><!-- NAVIGATION HEADER -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass">
+   <div class="container-responsive">
+    <div class="flex items-center justify-between py-4"><!-- Logo -->
+     <div class="flex items-center space-x-3">
+      <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center hover-lift"><span class="text-white font-bold text-lg">Q</span>
+      </div><span id="app-title" class="text-xl font-bold text-gray-900 hidden sm:block">Kuis-in</span>
+     </div><!-- Desktop Navigation -->
+     <div class="hidden md:flex items-center space-x-8"><a href="#" onclick="showPage('home')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Beranda</a> <a href="#" onclick="showPage('quiz')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Kuis</a> <a href="#" onclick="showPage('leaderboard')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Leaderboard</a> <a href="#" onclick="showPage('help')" class="nav-link text-white hover:text-gray-200 font-medium transition-colors">Bantuan</a>
+     </div><!-- Desktop CTA Buttons -->
+     <div class="hidden md:flex items-center space-x-4"><button onclick="showPage('login')" class="btn btn-secondary">Masuk</button> <button onclick="showPage('register')" class="btn btn-primary">Daftar</button>
+     </div><!-- Mobile Menu Button --> <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg></button>
+    </div>
+   </div><!-- Mobile Navigation Menu -->
+   <div id="mobile-menu" class="mobile-menu md:hidden fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50">
+    <div class="p-6">
+     <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center space-x-3">
+       <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"><span class="text-white font-bold text-sm">Q</span>
+       </div><span class="text-lg font-bold text-gray-900">Kuis-in</span>
+      </div><button id="close-mobile-menu" class="p-2 rounded-lg hover:bg-gray-100">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <nav class="space-y-4"><a href="#" onclick="showPage('home')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">🏠 Beranda</a> <a href="#" onclick="showPage('quiz')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">🧠 Kuis</a> <a href="#" onclick="showPage('leaderboard')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">🏆 Leaderboard</a> <a href="#" onclick="showPage('help')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">❓ Bantuan</a> <a href="#" onclick="showPage('login')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">🔑 Masuk</a> <a href="#" onclick="showPage('register')" class="mobile-nav-link block py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium transition-colors">📝 Daftar</a>
+     </nav>
+     <div class="mt-8 space-y-3"><button onclick="showPage('login')" class="w-full btn btn-secondary">Masuk</button> <button onclick="showPage('register')" class="w-full btn btn-primary">Daftar Sekarang</button>
+     </div>
+    </div>
+   </div><!-- Mobile Menu Overlay -->
+   <div id="mobile-menu-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
+  </nav><!-- HOME PAGE -->
+  <div id="home-page" class="page"><!-- Hero Section -->
+   <section class="hero-gradient min-h-screen flex items-center justify-center relative overflow-hidden pt-20"><!-- Background Decorations -->
+    <div class="absolute inset-0 overflow-hidden">
+     <div class="absolute -top-40 -right-40 w-80 h-80 bg-white opacity-10 rounded-full blur-3xl"></div>
+     <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white opacity-10 rounded-full blur-3xl"></div>
+     <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative z-10 text-center container-responsive"><!-- Hero Content -->
+     <div class="mb-12">
+      <h1 id="quiz-title" class="text-hero text-white mb-6 fade-in">Kuis Pengetahuan Umum</h1>
+      <p id="welcome-message" class="text-subtitle text-white opacity-90 mb-8 slide-up max-w-3xl mx-auto">Uji pengetahuan Anda dengan pertanyaan menarik dan raih skor tertinggi!</p><!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12 scale-in max-w-2xl mx-auto">
+       <div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+         5
+        </div>
+        <div class="text-white opacity-80 text-sm">
+         Pertanyaan
+        </div>
+       </div>
+       <div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+         ⭐
+        </div>
+        <div class="text-white opacity-80 text-sm">
+         Skor Tinggi
+        </div>
+       </div>
+       <div class="glass rounded-2xl p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-white mb-2">
+         🏆
+        </div>
+        <div class="text-white opacity-80 text-sm">
+         Prestasi
+        </div>
+       </div>
+      </div>
+     </div><!-- CTA Button --> <button onclick="showPage('quiz')" class="btn btn-primary text-lg px-8 sm:px-12 py-4 hover-lift"> <span class="mr-3">🚀</span> Mulai Kuis Sekarang </button>
+    </div>
+   </section><!-- Features Section -->
+   <section class="py-16 sm:py-24 bg-gray-50">
+    <div class="container-responsive">
+     <div class="text-center mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Mengapa Memilih Kuis-in?</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">Platform kuis terdepan dengan fitur-fitur canggih untuk pengalaman belajar yang optimal</p>
+     </div>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="card p-8 text-center hover-lift">
+       <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl">⚡</span>
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-4">Cepat &amp; Responsif</h3>
+       <p class="text-gray-600">Interface yang smooth dan loading yang cepat untuk pengalaman terbaik</p>
+      </div>
+      <div class="card p-8 text-center hover-lift">
+       <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl">📊</span>
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-4">Analytics Real-time</h3>
+       <p class="text-gray-600">Pantau progress dan performa Anda dengan statistik yang detail</p>
+      </div>
+      <div class="card p-8 text-center hover-lift">
+       <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-6"><span class="text-3xl">🎯</span>
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-4">Personalisasi</h3>
+       <p class="text-gray-600">Kuis yang disesuaikan dengan level dan minat Anda</p>
+      </div>
+     </div>
+    </div>
+   </section>
+  </div><!-- QUIZ PAGE -->
+  <div id="quiz-page" class="page hidden">
+   <div class="pt-20 min-h-screen bg-gray-50">
+    <div class="container-responsive py-8"><!-- Quiz Container -->
+     <div class="max-w-4xl mx-auto"><!-- Category Selection Screen -->
+      <div id="category-screen" class="card card-floating p-6 sm:p-8">
+       <div class="text-center mb-8">
+        <div class="w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span class="text-2xl sm:text-3xl">🎯</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Pilih Kategori Kuis</h2>
+        <p class="text-gray-600 text-base sm:text-lg">Pilih topik yang ingin Anda uji</p>
+       </div><!-- Category Grid -->
+       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8">
+        <div class="category-card bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-blue-300 transition-all duration-300" onclick="selectCategory('general')">
+         <div class="flex items-center mb-4">
+          <div class="text-3xl mr-4">
+           🌍
+          </div>
+          <div>
+           <h3 class="font-bold text-blue-900 text-lg">Pengetahuan Umum</h3>
+           <p class="text-blue-700 text-sm">Tes wawasan umum Anda</p>
+          </div>
+         </div>
+         <div class="flex justify-between items-center text-sm"><span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full font-medium">Mudah</span> <span class="text-blue-600 font-medium">⏱️ 30 detik/soal</span>
+         </div>
+        </div>
+        <div class="category-card bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-green-300 transition-all duration-300" onclick="selectCategory('science')">
+         <div class="flex items-center mb-4">
+          <div class="text-3xl mr-4">
+           🔬
+          </div>
+          <div>
+           <h3 class="font-bold text-green-900 text-lg">Sains &amp; Teknologi</h3>
+           <p class="text-green-700 text-sm">Uji pengetahuan sains Anda</p>
+          </div>
+         </div>
+         <div class="flex justify-between items-center text-sm"><span class="bg-green-200 text-green-800 px-3 py-1 rounded-full font-medium">Sedang</span> <span class="text-green-600 font-medium">⏱️ 45 detik/soal</span>
+         </div>
+        </div>
+        <div class="category-card bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-purple-300 transition-all duration-300" onclick="selectCategory('history')">
+         <div class="flex items-center mb-4">
+          <div class="text-3xl mr-4">
+           📚
+          </div>
+          <div>
+           <h3 class="font-bold text-purple-900 text-lg">Sejarah</h3>
+           <p class="text-purple-700 text-sm">Jelajahi peristiwa bersejarah</p>
+          </div>
+         </div>
+         <div class="flex justify-between items-center text-sm"><span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full font-medium">Sedang</span> <span class="text-purple-600 font-medium">⏱️ 40 detik/soal</span>
+         </div>
+        </div>
+        <div class="category-card bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl cursor-pointer hover-lift border-2 border-transparent hover:border-orange-300 transition-all duration-300" onclick="selectCategory('sports')">
+         <div class="flex items-center mb-4">
+          <div class="text-3xl mr-4">
+           ⚽
+          </div>
+          <div>
+           <h3 class="font-bold text-orange-900 text-lg">Olahraga</h3>
+           <p class="text-orange-700 text-sm">Tes pengetahuan olahraga Anda</p>
+          </div>
+         </div>
+         <div class="flex justify-between items-center text-sm"><span class="bg-orange-200 text-orange-800 px-3 py-1 rounded-full font-medium">Mudah</span> <span class="text-orange-600 font-medium">⏱️ 25 detik/soal</span>
+         </div>
+        </div>
+       </div><!-- Quick Stats -->
+       <div class="bg-gray-50 rounded-2xl p-6 text-center">
+        <div class="grid grid-cols-3 gap-4">
+         <div>
+          <div class="text-2xl font-bold text-gray-800">
+           5
+          </div>
+          <div class="text-sm text-gray-600">
+           Pertanyaan
+          </div>
+         </div>
+         <div>
+          <div class="text-2xl font-bold text-gray-800">
+           ⭐
+          </div>
+          <div class="text-sm text-gray-600">
+           Skor Maksimal
+          </div>
+         </div>
+         <div>
+          <div class="text-2xl font-bold text-gray-800">
+           🏆
+          </div>
+          <div class="text-sm text-gray-600">
+           Leaderboard
+          </div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Welcome Screen -->
+      <div id="welcome-screen" class="hidden card card-floating p-6 sm:p-12 text-center">
+       <div class="mb-8">
+        <div class="w-20 sm:w-24 h-20 sm:h-24 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span id="category-icon" class="text-3xl sm:text-4xl">🧠</span>
+        </div>
+        <h2 id="category-name" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Siap untuk tantangan?</h2>
+        <p id="category-description" class="text-gray-600 mb-6 text-base sm:text-lg">Jawab semua pertanyaan dan lihat seberapa baik pengetahuan Anda!</p><!-- Quiz Info -->
+        <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-6 mb-8">
+         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div>
+           <div class="text-2xl font-bold text-blue-600">
+            5
+           </div>
+           <div class="text-sm text-gray-600">
+            Pertanyaan
+           </div>
+          </div>
+          <div>
+           <div id="time-limit" class="text-2xl font-bold text-green-600">
+            30s
+           </div>
+           <div class="text-sm text-gray-600">
+            Per Soal
+           </div>
+          </div>
+          <div>
+           <div id="difficulty-level" class="text-2xl font-bold text-purple-600">
+            Mudah
+           </div>
+           <div class="text-sm text-gray-600">
+            Tingkat
+           </div>
+          </div>
+         </div>
+        </div><!-- Feature Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+         <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 sm:p-6 rounded-2xl hover-lift">
+          <div class="text-2xl sm:text-3xl mb-3">
+           ⏱️
+          </div>
+          <div class="font-semibold text-blue-900 mb-2 text-sm sm:text-base">
+           Timer Countdown
+          </div>
+          <div class="text-xs sm:text-sm text-blue-700">
+           Waktu terbatas untuk setiap soal
+          </div>
+         </div>
+         <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 sm:p-6 rounded-2xl hover-lift">
+          <div class="text-2xl sm:text-3xl mb-3">
+           💡
+          </div>
+          <div class="font-semibold text-green-900 mb-2 text-sm sm:text-base">
+           Penjelasan
+          </div>
+          <div class="text-xs sm:text-sm text-green-700">
+           Dapatkan penjelasan untuk setiap jawaban
+          </div>
+         </div>
+         <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 sm:p-6 rounded-2xl hover-lift">
+          <div class="text-2xl sm:text-3xl mb-3">
+           📊
+          </div>
+          <div class="font-semibold text-purple-900 mb-2 text-sm sm:text-base">
+           Statistik
+          </div>
+          <div class="text-xs sm:text-sm text-purple-700">
+           Analisis performa detail
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="showQuizScreen('category-screen')" class="btn btn-secondary"> ← Ganti Kategori </button> <button id="start-quiz-btn" class="btn btn-primary text-base sm:text-lg px-8 sm:px-10 py-3 sm:py-4"> 🚀 Mulai Kuis </button>
+       </div>
+      </div><!-- Quiz Screen -->
+      <div id="quiz-screen" class="hidden"><!-- Progress Bar -->
+       <div class="progress-container mb-6 sm:mb-8">
+        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+       </div>
+       <div class="card p-4 sm:p-8"><!-- Question Header -->
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8 gap-4"><!-- Question Counter -->
+         <div class="inline-flex items-center glass px-4 sm:px-6 py-2 sm:py-3 rounded-full">
+          <div class="w-3 h-3 bg-blue-500 rounded-full mr-3 animate-pulse"></div><span id="question-counter" class="font-semibold text-gray-800 text-sm sm:text-base">Pertanyaan 1 dari 5</span>
+         </div><!-- Timer -->
+         <div class="inline-flex items-center glass px-4 sm:px-6 py-2 sm:py-3 rounded-full">
+          <div class="w-3 h-3 bg-red-500 rounded-full mr-3 animate-pulse"></div><span id="timer-display" class="font-bold text-red-600 text-sm sm:text-base">30s</span>
+         </div>
+        </div><!-- Question Card -->
+        <div class="mb-6 sm:mb-8">
+         <div class="bg-gradient-to-r from-gray-50 to-blue-50 p-4 sm:p-8 rounded-2xl sm:rounded-3xl mb-6 sm:mb-8 border border-gray-100">
+          <div class="flex items-start">
+           <div class="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl sm:rounded-2xl flex items-center justify-center mr-4 sm:mr-6 flex-shrink-0"><span class="text-white text-base sm:text-lg font-bold">?</span>
+           </div>
+           <h3 id="question-text" class="text-lg sm:text-2xl font-bold text-gray-900 leading-relaxed"></h3>
+          </div>
+         </div><!-- Answer Options -->
+         <div id="answer-options" class="space-y-3 sm:space-y-4"><!-- Options will be inserted here -->
+         </div>
+        </div><!-- Feedback -->
+        <div id="feedback" class="hidden mb-6 sm:mb-8">
+         <div class="p-4 sm:p-6 rounded-2xl mb-4" id="feedback-container">
+          <p id="feedback-text" class="font-semibold text-base sm:text-lg mb-4"></p>
+         </div><!-- Explanation -->
+         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-4 sm:p-6">
+          <div class="flex items-start">
+           <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0"><span class="text-blue-600 text-sm font-bold">💡</span>
+           </div>
+           <div>
+            <h4 class="font-semibold text-blue-900 mb-2 text-sm sm:text-base">Penjelasan:</h4>
+            <p id="explanation-text" class="text-blue-800 text-sm sm:text-base leading-relaxed"></p>
+           </div>
+          </div>
+         </div>
+        </div><!-- Next Button -->
+        <div class="text-center"><button id="next-question" class="hidden btn btn-primary"> Pertanyaan Selanjutnya </button>
+        </div>
+       </div>
+      </div><!-- Results Screen -->
+      <div id="results-screen" class="hidden card p-6 sm:p-12 text-center">
+       <div class="mb-8 sm:mb-12">
+        <div id="result-icon" class="w-24 sm:w-32 h-24 sm:h-32 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 scale-in"><span id="result-emoji" class="text-4xl sm:text-6xl"></span>
+        </div>
+        <h2 id="result-title" class="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6 text-gradient"></h2>
+        <p id="completion-message" class="text-gray-600 mb-6 sm:mb-8 text-base sm:text-xl">Terima kasih telah mengikuti kuis!</p>
+       </div><!-- Score Display -->
+       <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl sm:rounded-3xl p-6 sm:p-10 mb-6 sm:mb-8 hover-lift border border-gray-100">
+        <div class="text-4xl sm:text-7xl font-bold text-gradient mb-4 sm:mb-6"><span id="final-score">0</span>/5
+        </div>
+        <p class="text-gray-800 font-semibold text-base sm:text-xl mb-4 sm:mb-6">Jawaban Benar</p><!-- Score Stars -->
+        <div class="flex justify-center space-x-2 sm:space-x-3 mb-6">
+         <div id="score-star-1" class="text-2xl sm:text-3xl text-gray-300 transition-all duration-300">
+          ⭐
+         </div>
+         <div id="score-star-2" class="text-2xl sm:text-3xl text-gray-300 transition-all duration-300">
+          ⭐
+         </div>
+         <div id="score-star-3" class="text-2xl sm:text-3xl text-gray-300 transition-all duration-300">
+          ⭐
+         </div>
+         <div id="score-star-4" class="text-2xl sm:text-3xl text-gray-300 transition-all duration-300">
+          ⭐
+         </div>
+         <div id="score-star-5" class="text-2xl sm:text-3xl text-gray-300 transition-all duration-300">
+          ⭐
+         </div>
+        </div><!-- Performance Badge -->
+        <div id="performance-badge" class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium"><span id="badge-icon" class="mr-2"></span> <span id="badge-text"></span>
+        </div>
+       </div><!-- Detailed Statistics -->
+       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-2xl p-6 border border-gray-200 text-center hover-lift">
+         <div class="text-2xl font-bold text-green-600 mb-2" id="correct-answers">
+          0
+         </div>
+         <div class="text-sm text-gray-600">
+          Jawaban Benar
+         </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-gray-200 text-center hover-lift">
+         <div class="text-2xl font-bold text-red-600 mb-2" id="wrong-answers">
+          0
+         </div>
+         <div class="text-sm text-gray-600">
+          Jawaban Salah
+         </div>
+        </div>
+        <div class="bg-white rounded-2xl p-6 border border-gray-200 text-center hover-lift">
+         <div class="text-2xl font-bold text-blue-600 mb-2" id="accuracy-percentage">
+          0%
+         </div>
+         <div class="text-sm text-gray-600">
+          Akurasi
+         </div>
+        </div>
+       </div><!-- Action Buttons -->
+       <div class="space-y-3 sm:space-y-4"><button id="restart-quiz" class="w-full btn btn-primary text-base sm:text-lg py-3 sm:py-4"> <span class="mr-3">🔄</span> Ulangi Kuis </button> <button id="view-history" class="w-full btn btn-secondary text-base sm:text-lg py-3 sm:py-4"> <span class="mr-3">📊</span> Lihat Riwayat Jawaban </button>
+       </div>
+      </div><!-- History Screen -->
+      <div id="history-screen" class="hidden card p-4 sm:p-8">
+       <div class="flex items-center justify-between mb-6 sm:mb-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Riwayat Jawaban</h2><button id="back-to-results" class="btn btn-secondary"> ← Kembali </button>
+       </div>
+       <div id="history-list" class="space-y-3 sm:space-y-4"><!-- History items will be inserted here -->
+       </div>
+      </div><!-- Loading Indicator -->
+      <div id="loading" class="hidden card p-8 sm:p-12 text-center">
+       <div class="loading-spinner mx-auto mb-6"></div>
+       <p class="text-gray-600 text-base sm:text-lg">Menyimpan jawaban...</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- LEADERBOARD PAGE -->
+  <div id="leaderboard-page" class="page hidden">
+   <div class="pt-20 min-h-screen bg-gray-50">
+    <div class="container-responsive py-8">
+     <div class="max-w-4xl mx-auto"><!-- Header -->
+      <div class="text-center mb-8 sm:mb-12">
+       <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">🏆 Leaderboard</h1>
+       <p class="text-base sm:text-lg text-gray-600">Lihat siapa yang memiliki skor tertinggi!</p>
+      </div><!-- Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+       <div class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-blue-600 mb-2" id="total-players">
+         0
+        </div>
+        <div class="text-gray-600 text-sm sm:text-base">
+         Total Pemain
+        </div>
+       </div>
+       <div class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-green-600 mb-2" id="total-games">
+         0
+        </div>
+        <div class="text-gray-600 text-sm sm:text-base">
+         Game Dimainkan
+        </div>
+       </div>
+       <div class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl font-bold text-purple-600 mb-2" id="avg-score">
+         0
+        </div>
+        <div class="text-gray-600 text-sm sm:text-base">
+         Rata-rata Skor
+        </div>
+       </div>
+      </div><!-- Leaderboard -->
+      <div class="card">
+       <div class="p-4 sm:p-6 border-b border-gray-200">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Top Performers</h2>
+       </div>
+       <div id="leaderboard-list" class="divide-y divide-gray-200"><!-- Leaderboard items will be inserted here -->
+       </div>
+      </div><!-- Empty State -->
+      <div id="leaderboard-empty" class="card p-8 sm:p-12 text-center">
+       <div class="w-16 sm:w-20 h-16 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-2xl sm:text-3xl">📊</span>
+       </div>
+       <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Belum Ada Data</h3>
+       <p class="text-gray-600 mb-6">Jadilah yang pertama bermain dan masuk ke leaderboard!</p><button onclick="showPage('quiz')" class="btn btn-primary"> Mulai Bermain </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- LOGIN PAGE -->
+  <div id="login-page" class="page hidden">
+   <div class="pt-20 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div class="container-responsive py-8">
+     <div class="max-w-md mx-auto"><!-- Header -->
+      <div class="text-center mb-8">
+       <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span class="text-white font-bold text-2xl">🔑</span>
+       </div>
+       <h1 class="text-3xl font-bold text-gray-900 mb-2">Masuk ke Kuis-in</h1>
+       <p class="text-gray-600">Selamat datang kembali! Masuk untuk melanjutkan belajar.</p>
+      </div><!-- Login Form -->
+      <div class="card p-8">
+       <form id="login-form" class="space-y-6"><!-- Email Field -->
+        <div><label for="login-email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label> <input type="email" id="login-email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500" placeholder="nama@email.com">
+        </div><!-- Password Field -->
+        <div><label for="login-password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+         <div class="relative"><input type="password" id="login-password" name="password" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 pr-12" placeholder="Masukkan password Anda"> <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+           <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+           </svg></button>
+         </div>
+        </div><!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between"><label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-600">Ingat saya</span> </label> <button type="button" class="text-sm text-blue-600 hover:text-blue-700 font-medium"> Lupa password? </button>
+        </div><!-- Submit Button --> <button type="submit" id="login-submit" class="w-full btn btn-primary text-lg py-4 relative overflow-hidden"> <span id="login-btn-text">🚀 Masuk Sekarang</span>
+         <div id="login-loading" class="hidden absolute inset-0 flex items-center justify-center">
+          <div class="loading-spinner w-6 h-6 border-2 border-white border-t-transparent"></div>
+         </div></button>
+       </form><!-- Success Message -->
+       <div id="login-success" class="hidden text-center py-8">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">✅</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Login Berhasil!</h3>
+        <p class="text-gray-600 mb-6">Selamat datang kembali! Anda sudah bisa mulai bermain kuis.</p><button onclick="showPage('quiz')" class="btn btn-primary"> Mulai Bermain </button>
+       </div>
+      </div><!-- Social Login -->
+      <div class="mt-6">
+       <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+         <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-center text-sm"><span class="px-2 bg-gray-50 text-gray-500">Atau masuk dengan</span>
+        </div>
+       </div>
+       <div class="mt-6 grid grid-cols-2 gap-3"><button class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+         <svg class="w-5 h-5 text-red-500" viewbox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /> <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /> <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /> <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+         </svg><span class="ml-2">Google</span> </button> <button class="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+         <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+         </svg><span class="ml-2">Facebook</span> </button>
+       </div>
+      </div><!-- Register Link -->
+      <div class="text-center mt-8">
+       <p class="text-gray-600">Belum punya akun? <button onclick="showPage('register')" class="text-blue-600 hover:text-blue-700 font-medium"> Daftar sekarang </button></p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- REGISTER PAGE -->
+  <div id="register-page" class="page hidden">
+   <div class="pt-20 min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+    <div class="container-responsive py-8">
+     <div class="max-w-md mx-auto"><!-- Header -->
+      <div class="text-center mb-8">
+       <div class="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 hover-lift"><span class="text-white font-bold text-2xl">K</span>
+       </div>
+       <h1 class="text-3xl font-bold text-gray-900 mb-2">Bergabung dengan Kuis-in</h1>
+       <p class="text-gray-600">Daftar gratis dan mulai petualangan belajar Anda!</p>
+      </div><!-- Registration Form -->
+      <div class="card p-8">
+       <form id="register-form" class="space-y-6"><!-- Name Field -->
+        <div><label for="register-name" class="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap</label> <input type="text" id="register-name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500" placeholder="Masukkan nama lengkap Anda">
+        </div><!-- Email Field -->
+        <div><label for="register-email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label> <input type="email" id="register-email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500" placeholder="nama@email.com">
+        </div><!-- Phone Field -->
+        <div><label for="register-phone" class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label> <input type="tel" id="register-phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500" placeholder="08xxxxxxxxxx">
+        </div><!-- Age Field -->
+        <div><label for="register-age" class="block text-sm font-semibold text-gray-700 mb-2">Usia</label> <select id="register-age" name="age" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900"> <option value="">Pilih usia Anda</option> <option value="13-17">13-17 tahun</option> <option value="18-25">18-25 tahun</option> <option value="26-35">26-35 tahun</option> <option value="36-45">36-45 tahun</option> <option value="46+">46+ tahun</option> </select>
+        </div><!-- Interests Field -->
+        <div><label class="block text-sm font-semibold text-gray-700 mb-3">Minat Kuis (Pilih yang sesuai)</label>
+         <div class="grid grid-cols-2 gap-3"><label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="pengetahuan-umum" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Pengetahuan Umum</span> </label> <label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="sains" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Sains</span> </label> <label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="sejarah" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Sejarah</span> </label> <label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="olahraga" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Olahraga</span> </label> <label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="teknologi" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Teknologi</span> </label> <label class="flex items-center space-x-2 cursor-pointer"> <input type="checkbox" name="interests" value="hiburan" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <span class="text-sm text-gray-700">Hiburan</span> </label>
+         </div>
+        </div><!-- Terms Checkbox -->
+        <div class="flex items-start space-x-3"><input type="checkbox" id="terms-agreement" name="terms" required class="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"> <label for="terms-agreement" class="text-sm text-gray-600 leading-relaxed"> Saya setuju dengan <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">Syarat &amp; Ketentuan</a> dan <a href="#" class="text-blue-600 hover:text-blue-700 font-medium">Kebijakan Privasi</a> Kuis-in </label>
+        </div><!-- Submit Button --> <button type="submit" id="register-submit" class="w-full btn btn-primary text-lg py-4 relative overflow-hidden"> <span id="register-btn-text">🚀 Daftar Sekarang</span>
+         <div id="register-loading" class="hidden absolute inset-0 flex items-center justify-center">
+          <div class="loading-spinner w-6 h-6 border-2 border-white border-t-transparent"></div>
+         </div></button>
+       </form><!-- Success Message -->
+       <div id="register-success" class="hidden text-center py-8">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">✅</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Pendaftaran Berhasil!</h3>
+        <p class="text-gray-600 mb-6">Selamat datang di Kuis-in! Anda sudah bisa mulai bermain kuis.</p><button onclick="showPage('quiz')" class="btn btn-primary"> Mulai Bermain </button>
+       </div>
+      </div><!-- Benefits Section -->
+      <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+       <div class="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm">
+        <div class="text-2xl mb-2">
+         🎯
+        </div>
+        <div class="text-sm font-medium text-gray-800">
+         Kuis Personal
+        </div>
+        <div class="text-xs text-gray-600">
+         Sesuai minat Anda
+        </div>
+       </div>
+       <div class="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm">
+        <div class="text-2xl mb-2">
+         🏆
+        </div>
+        <div class="text-sm font-medium text-gray-800">
+         Kompetisi
+        </div>
+        <div class="text-xs text-gray-600">
+         Bersaing dengan teman
+        </div>
+       </div>
+       <div class="text-center p-4 bg-white/50 rounded-xl backdrop-blur-sm">
+        <div class="text-2xl mb-2">
+         📊
+        </div>
+        <div class="text-sm font-medium text-gray-800">
+         Progress
+        </div>
+        <div class="text-xs text-gray-600">
+         Lacak perkembangan
+        </div>
+       </div>
+      </div><!-- Login Link -->
+      <div class="text-center mt-8">
+       <p class="text-gray-600">Sudah punya akun? <button onclick="showPage('login')" class="text-blue-600 hover:text-blue-700 font-medium"> Masuk sekarang </button></p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- HELP PAGE -->
+  <div id="help-page" class="page hidden">
+   <div class="pt-20 min-h-screen bg-gray-50">
+    <div class="container-responsive py-8">
+     <div class="max-w-4xl mx-auto"><!-- Header -->
+      <div class="text-center mb-8 sm:mb-12">
+       <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">❓ Bantuan &amp; FAQ</h1>
+       <p class="text-base sm:text-lg text-gray-600">Temukan jawaban untuk pertanyaan yang sering diajukan</p>
+      </div><!-- Quick Links -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 sm:mb-12"><a href="#cara-bermain" class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl mb-3">
+         🎮
+        </div>
+        <div class="font-semibold text-gray-900 text-sm sm:text-base">
+         Cara Bermain
+        </div></a> <a href="#scoring" class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl mb-3">
+         🏆
+        </div>
+        <div class="font-semibold text-gray-900 text-sm sm:text-base">
+         Sistem Skor
+        </div></a> <a href="#troubleshooting" class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl mb-3">
+         🔧
+        </div>
+        <div class="font-semibold text-gray-900 text-sm sm:text-base">
+         Troubleshooting
+        </div></a> <a href="#contact" class="card p-4 sm:p-6 text-center hover-lift">
+        <div class="text-2xl sm:text-3xl mb-3">
+         📞
+        </div>
+        <div class="font-semibold text-gray-900 text-sm sm:text-base">
+         Kontak
+        </div></a>
+      </div><!-- FAQ Sections -->
+      <div class="space-y-6 sm:space-y-8"><!-- Cara Bermain -->
+       <section id="cara-bermain" class="help-section">
+        <div class="card">
+         <div class="p-4 sm:p-6 border-b border-gray-200">
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">🎮 Cara Bermain</h2>
+         </div>
+         <div class="p-4 sm:p-6">
+          <div class="space-y-4 sm:space-y-6">
+           <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><span class="text-blue-600 font-bold text-sm">1</span>
+            </div>
+            <div>
+             <h3 class="font-semibold text-gray-900 mb-2">Mulai Kuis</h3>
+             <p class="text-gray-600 text-sm sm:text-base">Klik tombol "Mulai Kuis" di halaman utama untuk memulai permainan.</p>
+            </div>
+           </div>
+           <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><span class="text-blue-600 font-bold text-sm">2</span>
+            </div>
+            <div>
+             <h3 class="font-semibold text-gray-900 mb-2">Jawab Pertanyaan</h3>
+             <p class="text-gray-600 text-sm sm:text-base">Pilih salah satu dari 4 pilihan jawaban yang tersedia untuk setiap pertanyaan.</p>
+            </div>
+           </div>
+           <div class="flex items-start space-x-4">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0"><span class="text-blue-600 font-bold text-sm">3</span>
+            </div>
+            <div>
+             <h3 class="font-semibold text-gray-900 mb-2">Lihat Hasil</h3>
+             <p class="text-gray-600 text-sm sm:text-base">Setelah menjawab semua pertanyaan, Anda akan melihat skor dan dapat mengulang kuis.</p>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </section><!-- FAQ Items -->
+       <section id="scoring" class="help-section">
+        <div class="card">
+         <div class="p-4 sm:p-6 border-b border-gray-200">
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">🏆 Frequently Asked Questions</h2>
+         </div>
+         <div class="divide-y divide-gray-200">
+          <div class="faq-item">
+           <div class="faq-question" onclick="toggleFaq(this)"><span class="font-semibold text-gray-900 text-sm sm:text-base">Bagaimana sistem penilaian bekerja?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+           </div>
+           <div class="faq-answer hidden">
+            <p>Setiap jawaban benar akan memberikan 1 poin. Skor maksimal adalah 5 poin dari 5 pertanyaan. Tidak ada pengurangan poin untuk jawaban salah.</p>
+           </div>
+          </div>
+          <div class="faq-item">
+           <div class="faq-question" onclick="toggleFaq(this)"><span class="font-semibold text-gray-900 text-sm sm:text-base">Apakah ada batas waktu untuk menjawab?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+           </div>
+           <div class="faq-answer hidden">
+            <p>Tidak ada batas waktu. Anda dapat menjawab dengan santai dan memikirkan jawaban dengan baik.</p>
+           </div>
+          </div>
+          <div class="faq-item">
+           <div class="faq-question" onclick="toggleFaq(this)"><span class="font-semibold text-gray-900 text-sm sm:text-base">Bisakah saya mengulang kuis?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+           </div>
+           <div class="faq-answer hidden">
+            <p>Ya, Anda dapat mengulang kuis sebanyak yang Anda inginkan. Setiap attempt akan disimpan dalam riwayat.</p>
+           </div>
+          </div>
+          <div class="faq-item">
+           <div class="faq-question" onclick="toggleFaq(this)"><span class="font-semibold text-gray-900 text-sm sm:text-base">Apakah jawaban saya tersimpan?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+           </div>
+           <div class="faq-answer hidden">
+            <p>Ya, semua jawaban Anda tersimpan secara otomatis di cloud. Anda dapat melihat riwayat jawaban di halaman hasil.</p>
+           </div>
+          </div>
+         </div>
+        </div>
+       </section><!-- Contact Section -->
+       <section id="contact" class="help-section">
+        <div class="card p-4 sm:p-6 text-center">
+         <div class="w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-2xl sm:text-3xl">💬</span>
+         </div>
+         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4">Masih Butuh Bantuan?</h3>
+         <p class="text-gray-600 mb-6 text-sm sm:text-base">Tim support kami siap membantu Anda 24/7</p>
+         <div class="flex flex-col sm:flex-row gap-4 justify-center"><button class="btn btn-primary"> 📧 Email Support </button> <button class="btn btn-secondary"> 💬 Live Chat </button>
+         </div>
+        </div>
+       </section>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- FOOTER --> <!-- MODALS -->
+  <div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"><!-- Contact Modal -->
+   <div id="contact-modal" class="hidden bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-xl font-bold text-gray-900">📞 Hubungi Kami</h3><button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg></button>
+    </div>
+    <div class="space-y-4">
+     <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg"><span class="text-blue-600">📧</span>
+      <div>
+       <div class="font-medium text-gray-900">
+        Email
+       </div>
+       <div class="text-sm text-gray-600">
+        support@kuis-in.com
+       </div>
+      </div>
+     </div>
+     <div class="flex items-center space-x-3 p-3 bg-green-50 rounded-lg"><span class="text-green-600">📱</span>
+      <div>
+       <div class="font-medium text-gray-900">
+        WhatsApp
+       </div>
+       <div class="text-sm text-gray-600">
+        +62 812-3456-7890
+       </div>
+      </div>
+     </div>
+     <div class="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg"><span class="text-purple-600">💬</span>
+      <div>
+       <div class="font-medium text-gray-900">
+        Live Chat
+       </div>
+       <div class="text-sm text-gray-600">
+        Tersedia 24/7
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Feedback Modal -->
+   <div id="feedback-modal" class="hidden bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-xl font-bold text-gray-900">💌 Kirim Feedback</h3><button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg></button>
+    </div>
+    <form class="space-y-4">
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Jenis Feedback</label> <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"> <option>Saran Perbaikan</option> <option>Laporan Bug</option> <option>Fitur Baru</option> <option>Pujian</option> </select>
+     </div>
+     <div><label class="block text-sm font-medium text-gray-700 mb-2">Pesan</label> <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Tulis feedback Anda..."></textarea>
+     </div><button type="submit" class="w-full btn btn-primary">Kirim Feedback</button>
+    </form>
+   </div><!-- About Modal -->
+   <div id="about-modal" class="hidden bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between mb-6">
+     <h3 class="text-xl font-bold text-gray-900">ℹ️ Tentang Kuis-in</h3><button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg></button>
+    </div>
+    <div class="space-y-4 text-sm text-gray-600">
+     <p><strong class="text-gray-900">Kuis-in</strong> adalah platform kuis interaktif yang dirancang untuk membuat belajar menjadi lebih menyenangkan dan engaging.</p>
+     <p>Dengan berbagai kategori kuis dan fitur-fitur canggih, kami membantu pengguna menguji dan meningkatkan pengetahuan mereka.</p>
+     <div class="bg-blue-50 p-4 rounded-lg">
+      <div class="font-medium text-blue-900 mb-2">
+       Visi Kami
+      </div>
+      <div class="text-blue-800">
+       Menjadi platform edukasi terdepan yang membuat pembelajaran accessible dan enjoyable untuk semua.
+      </div>
+     </div>
+     <div class="text-center pt-4">
+      <div class="text-2xl mb-2">
+       🚀
+      </div>
+      <div class="font-medium text-gray-900">
+       Version 2.0
+      </div>
+      <div class="text-xs text-gray-500">
+       Powered by Canva Code
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <footer class="bg-gray-900 text-white relative overflow-hidden"><!-- Background Pattern -->
+   <div class="absolute inset-0 opacity-5">
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, #3b82f6 0%, transparent 50%), radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%);"></div>
+   </div>
+   <div class="relative z-10 container-responsive py-12 sm:py-16"><!-- Main Footer Content -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-8 sm:mb-12"><!-- Company Info -->
+     <div class="lg:col-span-1">
+      <div class="flex items-center mb-6">
+       <div class="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl sm:rounded-2xl flex items-center justify-center mr-4"><span class="text-white font-bold text-lg sm:text-xl">Q</span>
+       </div>
+       <div>
+        <div class="text-lg sm:text-2xl font-bold">
+         Kuis-in
+        </div>
+        <div class="text-gray-400 text-xs sm:text-sm">
+         Interactive Learning
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">Platform kuis interaktif yang membantu Anda menguji dan meningkatkan pengetahuan dengan cara yang menyenangkan.</p>
+      <div class="flex items-center space-x-2">
+       <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div><span class="text-xs text-gray-400">Status: Online</span>
+      </div>
+     </div><!-- Quick Links -->
+     <div>
+      <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Navigasi</h3>
+      <ul class="space-y-2 sm:space-y-3">
+       <li><a href="#" onclick="showPage('home')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">🏠 Beranda</a></li>
+       <li><a href="#" onclick="showPage('quiz')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">🧠 Kuis</a></li>
+       <li><a href="#" onclick="showPage('leaderboard')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">🏆 Leaderboard</a></li>
+       <li><a href="#" onclick="showPage('help')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">❓ Bantuan</a></li>
+       <li><a href="#" onclick="showPage('register')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">📝 Daftar</a></li>
+      </ul>
+     </div><!-- Features -->
+     <div>
+      <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Fitur Unggulan</h3>
+      <ul class="space-y-2 sm:space-y-3">
+       <li><span class="text-gray-400 text-xs sm:text-sm">⚡ Kuis Interaktif</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">📊 Skor Real-time</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">💾 Auto Save</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">📈 Riwayat Jawaban</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">🎯 Kuis Personal</span></li>
+      </ul>
+     </div><!-- Categories -->
+     <div>
+      <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Kategori Kuis</h3>
+      <ul class="space-y-2 sm:space-y-3">
+       <li><span class="text-gray-400 text-xs sm:text-sm">🌍 Pengetahuan Umum</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">🔬 Sains &amp; Teknologi</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">📚 Sejarah &amp; Budaya</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">⚽ Olahraga</span></li>
+       <li><span class="text-gray-400 text-xs sm:text-sm">🎬 Hiburan</span></li>
+      </ul>
+     </div><!-- Support -->
+     <div>
+      <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Dukungan</h3>
+      <ul class="space-y-2 sm:space-y-3">
+       <li><a href="#" onclick="showPage('help')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">💬 Bantuan</a></li>
+       <li><a href="#" onclick="showPage('help')" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm">❓ FAQ</a></li>
+       <li><button onclick="showContactModal()" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm text-left">📞 Kontak</button></li>
+       <li><button onclick="showFeedbackModal()" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm text-left">💌 Feedback</button></li>
+       <li><button onclick="showAboutModal()" class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm text-left">ℹ️ Tentang Kami</button></li>
+      </ul>
+     </div>
+    </div><!-- Bottom Footer -->
+    <div class="border-t border-gray-800 pt-6 sm:pt-8">
+     <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+      <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">
+       <div class="text-xs sm:text-sm text-gray-400">
+        © 2024 Kuis-in. All rights reserved.
+       </div>
+       <div class="flex space-x-4"><a href="#" class="text-gray-400 hover:text-white text-xs sm:text-sm transition-colors">Privacy</a> <a href="#" class="text-gray-400 hover:text-white text-xs sm:text-sm transition-colors">Terms</a>
+       </div>
+      </div>
+      <div class="flex items-center space-x-4 sm:space-x-6"><!-- Social Media Icons -->
+       <div class="flex items-center space-x-3"><a href="#" class="text-gray-400 hover:text-green-400 transition-colors" title="WhatsApp">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
+         </svg></a> <a href="#" class="text-gray-400 hover:text-red-400 transition-colors" title="YouTube">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+         </svg></a> <a href="#" class="text-gray-400 hover:text-pink-400 transition-colors" title="TikTok">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+         </svg></a> <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors" title="Facebook">
+         <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+         </svg></a>
+       </div><!-- Powered by -->
+       <div class="flex items-center space-x-2 sm:space-x-4"><span class="text-xs sm:text-sm text-gray-400">Powered by</span>
+        <div class="flex items-center space-x-2">
+         <div class="w-1 h-1 bg-blue-400 rounded-full animate-ping"></div><span class="text-xs sm:text-sm font-medium text-blue-300">Canva Code</span>
+        </div><span class="text-xs text-gray-500">v2.0</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Decorative Elements -->
+   <div class="absolute bottom-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-gradient-to-tl from-blue-500 to-transparent opacity-3 rounded-full blur-3xl"></div>
+   <div class="absolute top-0 left-0 w-24 sm:w-48 h-24 sm:h-48 bg-gradient-to-br from-purple-500 to-transparent opacity-3 rounded-full blur-2xl"></div>
+  </footer>
+  <script>
+        // Configuration object
+        const defaultConfig = {
+            app_title: "Kuis-in",
+            quiz_title: "Kuis Pengetahuan Umum",
+            welcome_message: "Uji pengetahuan Anda dengan pertanyaan menarik dan raih skor tertinggi!",
+            completion_message: "Terima kasih telah mengikuti kuis!",
+            primary_color: "#635bff",
+            secondary_color: "#3b82f6",
+            background_color: "#f8fafc",
+            accent_color: "#10b981",
+            text_color: "#1f2937"
+        };
+
+        // Quiz categories and questions data
+        const quizCategories = {
+            general: {
+                name: "Pengetahuan Umum",
+                icon: "🌍",
+                description: "Tes wawasan umum Anda",
+                difficulty: "Mudah",
+                timeLimit: 30,
+                questions: [
+                    {
+                        id: "gen1",
+                        question: "Apa ibu kota Indonesia?",
+                        options: ["Jakarta", "Bandung", "Surabaya", "Medan"],
+                        correct: 0,
+                        explanation: "Jakarta adalah ibu kota dan kota terbesar Indonesia sejak kemerdekaan."
+                    },
+                    {
+                        id: "gen2", 
+                        question: "Planet mana yang paling dekat dengan Matahari?",
+                        options: ["Venus", "Merkurius", "Mars", "Bumi"],
+                        correct: 1,
+                        explanation: "Merkurius adalah planet terdekat dengan Matahari dengan jarak rata-rata 58 juta km."
+                    },
+                    {
+                        id: "gen3",
+                        question: "Berapa hasil dari 15 × 8?",
+                        options: ["110", "120", "130", "140"],
+                        correct: 1,
+                        explanation: "15 × 8 = 120. Ini adalah operasi perkalian dasar."
+                    },
+                    {
+                        id: "gen4",
+                        question: "Siapa penemu lampu pijar?",
+                        options: ["Nikola Tesla", "Alexander Bell", "Thomas Edison", "Albert Einstein"],
+                        correct: 2,
+                        explanation: "Thomas Edison mematenkan lampu pijar praktis pertama pada tahun 1879."
+                    },
+                    {
+                        id: "gen5",
+                        question: "Apa nama samudra terbesar di dunia?",
+                        options: ["Samudra Atlantik", "Samudra Hindia", "Samudra Pasifik", "Samudra Arktik"],
+                        correct: 2,
+                        explanation: "Samudra Pasifik adalah samudra terbesar, mencakup sekitar 46% dari permukaan air dunia."
+                    }
+                ]
+            },
+            science: {
+                name: "Sains & Teknologi",
+                icon: "🔬",
+                description: "Uji pengetahuan sains Anda",
+                difficulty: "Sedang",
+                timeLimit: 45,
+                questions: [
+                    {
+                        id: "sci1",
+                        question: "Apa rumus kimia untuk air?",
+                        options: ["H2O", "CO2", "NaCl", "CH4"],
+                        correct: 0,
+                        explanation: "H2O adalah rumus kimia air, terdiri dari 2 atom hidrogen dan 1 atom oksigen."
+                    },
+                    {
+                        id: "sci2",
+                        question: "Berapa kecepatan cahaya dalam vakum?",
+                        options: ["300.000 km/s", "150.000 km/s", "450.000 km/s", "600.000 km/s"],
+                        correct: 0,
+                        explanation: "Kecepatan cahaya dalam vakum adalah sekitar 299.792.458 meter per detik atau ~300.000 km/s."
+                    },
+                    {
+                        id: "sci3",
+                        question: "Organ manakah yang memproduksi insulin?",
+                        options: ["Hati", "Ginjal", "Pankreas", "Jantung"],
+                        correct: 2,
+                        explanation: "Pankreas memproduksi insulin yang mengatur kadar gula darah dalam tubuh."
+                    },
+                    {
+                        id: "sci4",
+                        question: "Apa satuan dasar untuk arus listrik?",
+                        options: ["Volt", "Ampere", "Ohm", "Watt"],
+                        correct: 1,
+                        explanation: "Ampere (A) adalah satuan dasar SI untuk arus listrik."
+                    },
+                    {
+                        id: "sci5",
+                        question: "Gas apa yang paling banyak di atmosfer Bumi?",
+                        options: ["Oksigen", "Karbon Dioksida", "Nitrogen", "Argon"],
+                        correct: 2,
+                        explanation: "Nitrogen membentuk sekitar 78% dari atmosfer Bumi."
+                    }
+                ]
+            },
+            history: {
+                name: "Sejarah",
+                icon: "📚",
+                description: "Jelajahi peristiwa bersejarah",
+                difficulty: "Sedang",
+                timeLimit: 40,
+                questions: [
+                    {
+                        id: "his1",
+                        question: "Kapan Indonesia merdeka?",
+                        options: ["17 Agustus 1945", "17 Agustus 1944", "17 Agustus 1946", "17 Agustus 1947"],
+                        correct: 0,
+                        explanation: "Indonesia memproklamasikan kemerdekaan pada 17 Agustus 1945."
+                    },
+                    {
+                        id: "his2",
+                        question: "Siapa presiden pertama Indonesia?",
+                        options: ["Soekarno", "Soeharto", "Habibie", "Megawati"],
+                        correct: 0,
+                        explanation: "Soekarno adalah presiden pertama Republik Indonesia (1945-1967)."
+                    },
+                    {
+                        id: "his3",
+                        question: "Perang Dunia II berakhir pada tahun?",
+                        options: ["1944", "1945", "1946", "1947"],
+                        correct: 1,
+                        explanation: "Perang Dunia II berakhir pada tahun 1945 dengan menyerahnya Jepang."
+                    },
+                    {
+                        id: "his4",
+                        question: "Candi Borobudur dibangun pada masa kerajaan?",
+                        options: ["Majapahit", "Sriwijaya", "Sailendra", "Mataram"],
+                        correct: 2,
+                        explanation: "Candi Borobudur dibangun pada abad ke-8 oleh Dinasti Sailendra."
+                    },
+                    {
+                        id: "his5",
+                        question: "Organisasi apa yang didirikan pada 20 Mei 1908?",
+                        options: ["Sarekat Islam", "Budi Utomo", "Indische Partij", "PNI"],
+                        correct: 1,
+                        explanation: "Budi Utomo didirikan pada 20 Mei 1908, diperingati sebagai Hari Kebangkitan Nasional."
+                    }
+                ]
+            },
+            sports: {
+                name: "Olahraga",
+                icon: "⚽",
+                description: "Tes pengetahuan olahraga Anda",
+                difficulty: "Mudah",
+                timeLimit: 25,
+                questions: [
+                    {
+                        id: "spo1",
+                        question: "Berapa jumlah pemain dalam satu tim sepak bola?",
+                        options: ["10", "11", "12", "9"],
+                        correct: 1,
+                        explanation: "Setiap tim sepak bola terdiri dari 11 pemain di lapangan."
+                    },
+                    {
+                        id: "spo2",
+                        question: "Olahraga apa yang menggunakan shuttlecock?",
+                        options: ["Tenis", "Badminton", "Squash", "Ping Pong"],
+                        correct: 1,
+                        explanation: "Badminton menggunakan shuttlecock sebagai proyektilnya."
+                    },
+                    {
+                        id: "spo3",
+                        question: "Berapa set maksimal dalam pertandingan tenis?",
+                        options: ["3", "4", "5", "6"],
+                        correct: 2,
+                        explanation: "Pertandingan tenis pria Grand Slam dimainkan maksimal 5 set."
+                    },
+                    {
+                        id: "spo4",
+                        question: "Negara mana yang menjadi tuan rumah Piala Dunia 2018?",
+                        options: ["Brasil", "Jerman", "Rusia", "Qatar"],
+                        correct: 2,
+                        explanation: "Rusia menjadi tuan rumah Piala Dunia FIFA 2018."
+                    },
+                    {
+                        id: "spo5",
+                        question: "Berapa poin untuk slam dunk dalam bola basket?",
+                        options: ["1", "2", "3", "4"],
+                        correct: 1,
+                        explanation: "Slam dunk bernilai 2 poin, sama seperti tembakan lapangan biasa."
+                    }
+                ]
+            }
+        };
+
+        // Current quiz state
+        let currentCategory = 'general';
+        let currentQuestions = [];
+        let timeRemaining = 0;
+        let timerInterval = null;
+
+        // Application state
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswered = false;
+        let allGameData = [];
+
+        // Data handler for SDK
+        const dataHandler = {
+            onDataChanged(data) {
+                allGameData = data;
+                updateLeaderboard();
+                console.log('Data updated:', data.length, 'records');
+            }
+        };
+
+        // Initialize application
+        async function initApp() {
+            // Initialize Data SDK
+            if (window.dataSdk) {
+                const initResult = await window.dataSdk.init(dataHandler);
+                if (!initResult.isOk) {
+                    console.error('Failed to initialize data SDK');
+                }
+            }
+
+            // Initialize Element SDK
+            if (window.elementSdk) {
+                await window.elementSdk.init({
+                    defaultConfig,
+                    render,
+                    mapToCapabilities,
+                    mapToEditPanelValues
+                });
+            }
+
+            setupEventListeners();
+            render(window.elementSdk?.config || defaultConfig);
+            showPage('home');
+        }
+
+        // Render function for Element SDK
+        async function render(config) {
+            // Update text content
+            const appTitleElements = document.querySelectorAll('#app-title');
+            appTitleElements.forEach(el => {
+                el.textContent = config.app_title || defaultConfig.app_title;
+            });
+            
+            document.getElementById('quiz-title').textContent = config.quiz_title || defaultConfig.quiz_title;
+            document.getElementById('welcome-message').textContent = config.welcome_message || defaultConfig.welcome_message;
+            document.getElementById('completion-message').textContent = config.completion_message || defaultConfig.completion_message;
+
+            // Update colors via CSS custom properties
+            const root = document.documentElement;
+            root.style.setProperty('--primary-gradient-start', config.primary_color || defaultConfig.primary_color);
+            root.style.setProperty('--secondary-blue', config.secondary_color || defaultConfig.secondary_color);
+            root.style.setProperty('--gray-50', config.background_color || defaultConfig.background_color);
+            root.style.setProperty('--accent-green', config.accent_color || defaultConfig.accent_color);
+            root.style.setProperty('--gray-800', config.text_color || defaultConfig.text_color);
+        }
+
+        // Capabilities mapping for Element SDK
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [
+                    {
+                        get: () => config.primary_color || defaultConfig.primary_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.secondary_color || defaultConfig.secondary_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ secondary_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.background_color || defaultConfig.background_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ background_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.accent_color || defaultConfig.accent_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ accent_color: value });
+                            }
+                        }
+                    },
+                    {
+                        get: () => config.text_color || defaultConfig.text_color,
+                        set: (value) => {
+                            if (window.elementSdk) {
+                                window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    }
+                ],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        // Edit panel values mapping
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["quiz_title", config.quiz_title || defaultConfig.quiz_title],
+                ["welcome_message", config.welcome_message || defaultConfig.welcome_message],
+                ["completion_message", config.completion_message || defaultConfig.completion_message]
+            ]);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Mobile menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', openMobileMenu);
+            document.getElementById('close-mobile-menu').addEventListener('click', closeMobileMenu);
+            document.getElementById('mobile-menu-overlay').addEventListener('click', closeMobileMenu);
+
+            // Quiz events
+            document.getElementById('start-quiz-btn').addEventListener('click', startQuiz);
+            document.getElementById('next-question').addEventListener('click', nextQuestion);
+            document.getElementById('restart-quiz').addEventListener('click', restartQuiz);
+            document.getElementById('view-history').addEventListener('click', showHistory);
+            document.getElementById('back-to-results').addEventListener('click', showResults);
+
+            // Login & Register events
+            document.getElementById('login-form').addEventListener('submit', handleLoginSubmit);
+            document.getElementById('register-form').addEventListener('submit', handleRegisterSubmit);
+            document.getElementById('toggle-password').addEventListener('click', togglePasswordVisibility);
+
+            // Navigation active states
+            updateNavActiveStates();
+        }
+
+        // Page navigation
+        function showPage(pageId) {
+            const pages = ['home', 'quiz', 'leaderboard', 'help', 'login', 'register'];
+            
+            pages.forEach(id => {
+                const page = document.getElementById(`${id}-page`);
+                if (id === pageId) {
+                    page.classList.remove('hidden');
+                } else {
+                    page.classList.add('hidden');
+                }
+            });
+
+            // Close mobile menu
+            closeMobileMenu();
+            
+            // Update navigation active states
+            updateNavActiveStates(pageId);
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Load page-specific data
+            if (pageId === 'leaderboard') {
+                loadLeaderboard();
+            } else if (pageId === 'register') {
+                resetRegisterForm();
+            } else if (pageId === 'login') {
+                resetLoginForm();
+            }
+        }
+
+        // Update navigation active states
+        function updateNavActiveStates(activePage = 'home') {
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+            navLinks.forEach(link => {
+                if (link.classList.contains('nav-link')) {
+                    // Desktop navigation - always white text
+                    link.classList.remove('text-blue-300', 'text-blue-600', 'font-bold');
+                    link.classList.add('text-white');
+                } else if (link.classList.contains('mobile-nav-link')) {
+                    // Mobile navigation - gray text
+                    link.classList.remove('text-blue-600', 'font-bold');
+                    link.classList.add('text-gray-700');
+                }
+            });
+
+            // Set active link
+            const activeLinks = document.querySelectorAll(`[onclick="showPage('${activePage}')"]`);
+            activeLinks.forEach(link => {
+                if (link.classList.contains('nav-link')) {
+                    // Desktop active - still white but with light blue tint and bold
+                    link.classList.remove('text-blue-300', 'text-blue-600');
+                    link.classList.add('text-blue-200', 'font-bold');
+                } else if (link.classList.contains('mobile-nav-link')) {
+                    // Mobile active - blue text
+                    link.classList.remove('text-gray-700');
+                    link.classList.add('text-blue-600', 'font-bold');
+                }
+            });
+        }
+
+        // Mobile menu functions
+        function openMobileMenu() {
+            document.getElementById('mobile-menu').classList.add('open');
+            document.getElementById('mobile-menu-overlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.getElementById('mobile-menu-overlay').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Category selection
+        function selectCategory(categoryId) {
+            currentCategory = categoryId;
+            const category = quizCategories[categoryId];
+            currentQuestions = [...category.questions];
+            
+            // Update welcome screen with category info
+            document.getElementById('category-icon').textContent = category.icon;
+            document.getElementById('category-name').textContent = category.name;
+            document.getElementById('category-description').textContent = category.description;
+            document.getElementById('time-limit').textContent = category.timeLimit + 's';
+            document.getElementById('difficulty-level').textContent = category.difficulty;
+            
+            showQuizScreen('welcome-screen');
+        }
+
+        // Quiz functions
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            timeRemaining = quizCategories[currentCategory].timeLimit;
+            
+            showQuizScreen('quiz-screen');
+            displayQuestion();
+        }
+
+        function showQuizScreen(screenId) {
+            const screens = ['category-screen', 'welcome-screen', 'quiz-screen', 'results-screen', 'history-screen'];
+            
+            screens.forEach(id => {
+                const element = document.getElementById(id);
+                if (id === screenId) {
+                    element.classList.remove('hidden');
+                    element.classList.add('fade-in');
+                } else {
+                    element.classList.add('hidden');
+                }
+            });
+        }
+
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestion];
+            isAnswered = false;
+            
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Reset timer
+            timeRemaining = quizCategories[currentCategory].timeLimit;
+            updateTimerDisplay();
+            startTimer();
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+            document.getElementById('question-counter').textContent = `Pertanyaan ${currentQuestion + 1} dari ${currentQuestions.length}`;
+            
+            // Display question with animation
+            const questionText = document.getElementById('question-text');
+            questionText.style.opacity = '0';
+            setTimeout(() => {
+                questionText.textContent = question.question;
+                questionText.style.opacity = '1';
+                questionText.style.transition = 'opacity 0.5s ease-in';
+            }, 100);
+            
+            // Create answer options
+            const optionsContainer = document.getElementById('answer-options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'card-question w-full text-left group p-4 sm:p-6';
+                button.id = `option-${index}`;
+                
+                const optionContent = document.createElement('div');
+                optionContent.className = 'flex items-center';
+                
+                const optionIcon = document.createElement('div');
+                optionIcon.className = 'w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-r from-gray-100 to-gray-200 group-hover:from-blue-100 group-hover:to-purple-100 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4 transition-all duration-300 font-semibold text-gray-700 group-hover:text-blue-700 text-sm sm:text-base';
+                optionIcon.textContent = String.fromCharCode(65 + index);
+                
+                const optionText = document.createElement('span');
+                optionText.className = 'font-medium text-gray-800 group-hover:text-gray-900 transition-colors duration-300 text-sm sm:text-lg';
+                optionText.textContent = option;
+                
+                optionContent.appendChild(optionIcon);
+                optionContent.appendChild(optionText);
+                button.appendChild(optionContent);
+                
+                button.addEventListener('click', () => selectAnswer(index));
+                
+                // Add staggered animation
+                button.style.opacity = '0';
+                button.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    button.classList.add('fade-in');
+                    button.style.opacity = '1';
+                    button.style.transform = 'translateY(0)';
+                }, 150 + (index * 100));
+                
+                optionsContainer.appendChild(button);
+            });
+            
+            // Hide feedback and next button
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-question').classList.add('hidden');
+        }
+
+        // Timer functions
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    if (!isAnswered) {
+                        timeUp();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timer-display');
+            timerDisplay.textContent = timeRemaining + 's';
+            
+            // Change color based on remaining time
+            if (timeRemaining <= 5) {
+                timerDisplay.className = 'font-bold text-red-600 text-sm sm:text-base animate-pulse';
+            } else if (timeRemaining <= 10) {
+                timerDisplay.className = 'font-bold text-orange-600 text-sm sm:text-base';
+            } else {
+                timerDisplay.className = 'font-bold text-green-600 text-sm sm:text-base';
+            }
+        }
+
+        function timeUp() {
+            isAnswered = true;
+            
+            // Disable all options
+            const options = document.querySelectorAll('#answer-options button');
+            options.forEach(button => {
+                button.disabled = true;
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.5';
+            });
+            
+            // Show correct answer
+            const question = currentQuestions[currentQuestion];
+            const correctOption = document.getElementById(`option-${question.correct}`);
+            if (correctOption) {
+                correctOption.classList.add('correct');
+                correctOption.style.opacity = '1';
+            }
+            
+            // Record as wrong answer
+            const answerData = {
+                question_id: question.id,
+                user_answer: "Waktu Habis",
+                correct_answer: question.options[question.correct],
+                is_correct: false,
+                completed_at: new Date().toISOString(),
+                user_name: "Anonymous",
+                score: 0,
+                total_questions: 1,
+                quiz_type: currentCategory
+            };
+            
+            userAnswers.push(answerData);
+            
+            // Show feedback
+            showFeedback(false, question);
+            
+            // Save to Data SDK
+            saveAnswer(answerData);
+        }
+
+        async function selectAnswer(selectedIndex) {
+            if (isAnswered) return;
+            
+            isAnswered = true;
+            
+            // Stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            const question = currentQuestions[currentQuestion];
+            const isCorrect = selectedIndex === question.correct;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Store user answer
+            const answerData = {
+                question_id: question.id,
+                user_answer: question.options[selectedIndex],
+                correct_answer: question.options[question.correct],
+                is_correct: isCorrect,
+                completed_at: new Date().toISOString(),
+                user_name: "Anonymous",
+                score: isCorrect ? 1 : 0,
+                total_questions: 1,
+                quiz_type: currentCategory
+            };
+            
+            userAnswers.push(answerData);
+            
+            // Update UI
+            const options = document.querySelectorAll('#answer-options button');
+            options.forEach((button, index) => {
+                button.disabled = true;
+                button.style.pointerEvents = 'none';
+                
+                if (index === question.correct) {
+                    button.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    button.classList.add('incorrect');
+                } else {
+                    button.style.opacity = '0.5';
+                    button.style.transform = 'scale(0.98)';
+                }
+            });
+            
+            // Show feedback
+            showFeedback(isCorrect, question);
+            
+            // Save to Data SDK
+            await saveAnswer(answerData);
+        }
+
+        function showFeedback(isCorrect, question) {
+            const feedbackContainer = document.getElementById('feedback-container');
+            const feedbackText = document.getElementById('feedback-text');
+            const explanationText = document.getElementById('explanation-text');
+            
+            if (isCorrect) {
+                feedbackContainer.className = 'p-4 sm:p-6 rounded-2xl mb-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 scale-in';
+                feedbackText.innerHTML = '<span class="text-xl sm:text-2xl mr-3">✅</span>Benar! Jawaban Anda tepat.';
+                feedbackText.className = 'font-semibold text-base sm:text-lg text-green-800 flex items-center justify-center mb-4';
+            } else {
+                feedbackContainer.className = 'p-4 sm:p-6 rounded-2xl mb-4 bg-gradient-to-r from-red-50 to-rose-50 border border-red-200 scale-in';
+                feedbackText.innerHTML = `<span class="text-xl sm:text-2xl mr-3">❌</span>Salah. Jawaban yang benar adalah: <strong>${question.options[question.correct]}</strong>`;
+                feedbackText.className = 'font-semibold text-base sm:text-lg text-red-800 flex items-center justify-center text-center mb-4';
+            }
+            
+            // Show explanation
+            explanationText.textContent = question.explanation || 'Tidak ada penjelasan tersedia.';
+            
+            document.getElementById('feedback').classList.remove('hidden');
+            
+            // Show next button
+            setTimeout(() => {
+                if (currentQuestion < currentQuestions.length - 1) {
+                    document.getElementById('next-question').classList.remove('hidden');
+                } else {
+                    document.getElementById('next-question').textContent = 'Lihat Hasil';
+                    document.getElementById('next-question').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        async function saveAnswer(answerData) {
+            // Show loading
+            showLoading(true);
+            
+            // Save to Data SDK
+            if (window.dataSdk && allGameData.length < 999) {
+                const result = await window.dataSdk.create(answerData);
+                if (!result.isOk) {
+                    console.error('Failed to save answer:', result.error);
+                }
+            } else if (allGameData.length >= 999) {
+                // Show warning about data limit
+                console.warn('Data limit reached (999 records). Cannot save more answers.');
+            }
+            
+            showLoading(false);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < currentQuestions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            console.log('Showing results - Score:', score, 'Total Questions:', currentQuestions.length);
+            
+            // Clear any remaining timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            const totalQuestions = currentQuestions.length;
+            const percentage = (score / totalQuestions) * 100;
+            const wrongAnswers = totalQuestions - score;
+            
+            console.log('Results calculated - Percentage:', percentage, 'Wrong:', wrongAnswers);
+            
+            // Update result display with force refresh
+            const finalScoreEl = document.getElementById('final-score');
+            const correctAnswersEl = document.getElementById('correct-answers');
+            const wrongAnswersEl = document.getElementById('wrong-answers');
+            const accuracyEl = document.getElementById('accuracy-percentage');
+            
+            if (finalScoreEl) finalScoreEl.textContent = score;
+            if (correctAnswersEl) correctAnswersEl.textContent = score;
+            if (wrongAnswersEl) wrongAnswersEl.textContent = wrongAnswers;
+            if (accuracyEl) accuracyEl.textContent = Math.round(percentage) + '%';
+            
+            const resultIcon = document.getElementById('result-icon');
+            const resultEmoji = document.getElementById('result-emoji');
+            const resultTitle = document.getElementById('result-title');
+            const performanceBadge = document.getElementById('performance-badge');
+            const badgeIcon = document.getElementById('badge-icon');
+            const badgeText = document.getElementById('badge-text');
+            
+            // Performance evaluation with console logging
+            console.log('Setting performance based on percentage:', percentage);
+            
+            if (percentage >= 90) {
+                if (resultIcon) resultIcon.className = 'w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 bounce-in shadow-2xl';
+                if (resultEmoji) resultEmoji.textContent = '🏆';
+                if (resultTitle) resultTitle.textContent = 'Sempurna!';
+                if (performanceBadge) performanceBadge.className = 'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800';
+                if (badgeIcon) badgeIcon.textContent = '👑';
+                if (badgeText) badgeText.textContent = 'Master Quiz';
+            } else if (percentage >= 80) {
+                if (resultIcon) resultIcon.className = 'w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 bounce-in shadow-2xl';
+                if (resultEmoji) resultEmoji.textContent = '🎉';
+                if (resultTitle) resultTitle.textContent = 'Luar Biasa!';
+                if (performanceBadge) performanceBadge.className = 'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800';
+                if (badgeIcon) badgeIcon.textContent = '⭐';
+                if (badgeText) badgeText.textContent = 'Excellent';
+            } else if (percentage >= 60) {
+                if (resultIcon) resultIcon.className = 'w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 bounce-in shadow-2xl';
+                if (resultEmoji) resultEmoji.textContent = '👍';
+                if (resultTitle) resultTitle.textContent = 'Bagus!';
+                if (performanceBadge) performanceBadge.className = 'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-800';
+                if (badgeIcon) badgeIcon.textContent = '👏';
+                if (badgeText) badgeText.textContent = 'Good Job';
+            } else if (percentage >= 40) {
+                if (resultIcon) resultIcon.className = 'w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 bounce-in shadow-2xl';
+                if (resultEmoji) resultEmoji.textContent = '📚';
+                if (resultTitle) resultTitle.textContent = 'Terus Belajar!';
+                if (performanceBadge) performanceBadge.className = 'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-orange-100 text-orange-800';
+                if (badgeIcon) badgeIcon.textContent = '💪';
+                if (badgeText) badgeText.textContent = 'Keep Trying';
+            } else {
+                if (resultIcon) resultIcon.className = 'w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 bounce-in shadow-2xl';
+                if (resultEmoji) resultEmoji.textContent = '🎯';
+                if (resultTitle) resultTitle.textContent = 'Jangan Menyerah!';
+                if (performanceBadge) performanceBadge.className = 'inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800';
+                if (badgeIcon) badgeIcon.textContent = '🚀';
+                if (badgeText) badgeText.textContent = 'Practice More';
+            }
+            
+            // Animate stars based on score
+            setTimeout(() => {
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.getElementById(`score-star-${i}`);
+                    if (star && i <= score) {
+                        setTimeout(() => {
+                            star.style.transform = 'scale(1.3)';
+                            star.style.color = '#fbbf24';
+                            setTimeout(() => {
+                                star.style.transform = 'scale(1)';
+                            }, 200);
+                        }, i * 200);
+                    }
+                }
+            }, 500);
+            
+            console.log('About to show results screen');
+            showQuizScreen('results-screen');
+            
+            // Force scroll to top of results
+            setTimeout(() => {
+                const resultsScreen = document.getElementById('results-screen');
+                if (resultsScreen) {
+                    resultsScreen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+
+        function showHistory() {
+            console.log('Showing history - User answers:', userAnswers.length);
+            
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            if (userAnswers.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">📝</div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Belum Ada Riwayat</h3>
+                        <p class="text-gray-600">Selesaikan kuis untuk melihat riwayat jawaban Anda.</p>
+                    </div>
+                `;
+                showQuizScreen('history-screen');
+                return;
+            }
+            
+            userAnswers.forEach((answer, index) => {
+                const item = document.createElement('div');
+                item.className = 'bg-gray-50 rounded-lg p-4 border hover-lift';
+                
+                // Find question from current questions
+                const question = currentQuestions.find(q => q.id === answer.question_id);
+                const statusIcon = answer.is_correct ? '✅' : '❌';
+                const statusColor = answer.is_correct ? 'text-green-600' : 'text-red-600';
+                
+                const questionText = question ? question.question : 'Pertanyaan tidak ditemukan';
+                const explanation = question ? question.explanation : '';
+                
+                item.innerHTML = `
+                    <div class="flex items-start justify-between mb-3">
+                        <span class="font-medium text-gray-800 text-sm sm:text-base">Pertanyaan ${index + 1}</span>
+                        <span class="${statusColor} font-bold text-lg">${statusIcon}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-700 mb-3 font-medium">${questionText}</p>
+                    <div class="text-xs sm:text-sm space-y-2">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                            <p><strong class="text-gray-900">Jawaban Anda:</strong> <span class="${answer.is_correct ? 'text-green-700' : 'text-red-700'}">${answer.user_answer}</span></p>
+                            ${!answer.is_correct ? `<p><strong class="text-gray-900">Jawaban Benar:</strong> <span class="text-green-700">${answer.correct_answer}</span></p>` : ''}
+                        </div>
+                        ${explanation ? `
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                                <p class="text-blue-800"><strong>💡 Penjelasan:</strong> ${explanation}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                historyList.appendChild(item);
+            });
+            
+            showQuizScreen('history-screen');
+        }
+
+        function restartQuiz() {
+            // Clear timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Reset quiz state
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            isAnswered = false;
+            
+            // Show category selection
+            showQuizScreen('category-screen');
+        }
+
+        // Modal functions
+        function showContactModal() {
+            document.getElementById('contact-modal').classList.remove('hidden');
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+        function showFeedbackModal() {
+            document.getElementById('feedback-modal').classList.remove('hidden');
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+        function showAboutModal() {
+            document.getElementById('about-modal').classList.remove('hidden');
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('contact-modal').classList.add('hidden');
+            document.getElementById('feedback-modal').classList.add('hidden');
+            document.getElementById('about-modal').classList.add('hidden');
+            document.getElementById('modal-overlay').classList.add('hidden');
+        }
+
+        // Login form functions
+        function handleLoginSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('login-submit');
+            const btnText = document.getElementById('login-btn-text');
+            const loading = document.getElementById('login-loading');
+            
+            // Show loading state
+            btnText.classList.add('hidden');
+            loading.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Simulate login process
+            setTimeout(() => {
+                // Hide form and show success
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('login-success').classList.remove('hidden');
+                
+                // Reset button state
+                btnText.classList.remove('hidden');
+                loading.classList.add('hidden');
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        function resetLoginForm() {
+            document.getElementById('login-form').classList.remove('hidden');
+            document.getElementById('login-success').classList.add('hidden');
+            document.getElementById('login-form').reset();
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('login-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                `;
+            }
+        }
+
+        // Register form functions
+        function handleRegisterSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('register-submit');
+            const btnText = document.getElementById('register-btn-text');
+            const loading = document.getElementById('register-loading');
+            
+            // Show loading state
+            btnText.classList.add('hidden');
+            loading.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Simulate registration process
+            setTimeout(() => {
+                // Hide form and show success
+                document.getElementById('register-form').classList.add('hidden');
+                document.getElementById('register-success').classList.remove('hidden');
+                
+                // Reset button state
+                btnText.classList.remove('hidden');
+                loading.classList.add('hidden');
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        function resetRegisterForm() {
+            document.getElementById('register-form').classList.remove('hidden');
+            document.getElementById('register-success').classList.add('hidden');
+            document.getElementById('register-form').reset();
+        }
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            if (show) {
+                loading.classList.remove('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+
+        // Leaderboard functions
+        function loadLeaderboard() {
+            updateLeaderboard();
+        }
+
+        function updateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            const leaderboardEmpty = document.getElementById('leaderboard-empty');
+            
+            if (allGameData.length === 0) {
+                leaderboardList.classList.add('hidden');
+                leaderboardEmpty.classList.remove('hidden');
+                return;
+            }
+            
+            leaderboardEmpty.classList.add('hidden');
+            leaderboardList.classList.remove('hidden');
+            
+            // Process data for leaderboard
+            const playerStats = {};
+            
+            allGameData.forEach(record => {
+                const playerName = record.user_name || 'Anonymous';
+                if (!playerStats[playerName]) {
+                    playerStats[playerName] = {
+                        name: playerName,
+                        totalScore: 0,
+                        totalQuestions: 0,
+                        gamesPlayed: 0
+                    };
+                }
+                
+                playerStats[playerName].totalScore += record.is_correct ? 1 : 0;
+                playerStats[playerName].totalQuestions += 1;
+                playerStats[playerName].gamesPlayed += 1;
+            });
+            
+            // Convert to array and sort
+            const sortedPlayers = Object.values(playerStats)
+                .map(player => ({
+                    ...player,
+                    percentage: (player.totalScore / player.totalQuestions) * 100
+                }))
+                .sort((a, b) => b.percentage - a.percentage || b.totalScore - a.totalScore);
+            
+            // Update stats
+            document.getElementById('total-players').textContent = sortedPlayers.length;
+            document.getElementById('total-games').textContent = allGameData.length;
+            document.getElementById('avg-score').textContent = 
+                sortedPlayers.length > 0 
+                    ? Math.round(sortedPlayers.reduce((sum, p) => sum + p.percentage, 0) / sortedPlayers.length) + '%'
+                    : '0%';
+            
+            // Render leaderboard
+            leaderboardList.innerHTML = '';
+            
+            sortedPlayers.slice(0, 10).forEach((player, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item p-4 sm:p-6 flex items-center justify-between';
+                
+                const rank = index + 1;
+                let rankClass = 'rank-other';
+                if (rank === 1) rankClass = 'rank-1';
+                else if (rank === 2) rankClass = 'rank-2';
+                else if (rank === 3) rankClass = 'rank-3';
+                
+                item.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="rank-badge ${rankClass}">
+                            ${rank}
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-900 text-sm sm:text-base">${player.name}</div>
+                            <div class="text-xs sm:text-sm text-gray-500">${player.gamesPlayed} games played</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-gray-900 text-sm sm:text-lg">${Math.round(player.percentage)}%</div>
+                        <div class="text-xs sm:text-sm text-gray-500">${player.totalScore}/${player.totalQuestions}</div>
+                    </div>
+                `;
+                
+                leaderboardList.appendChild(item);
+            });
+        }
+
+        // Help page functions
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const icon = element.querySelector('.faq-icon');
+            
+            faqItem.classList.toggle('open');
+            
+            if (faqItem.classList.contains('open')) {
+                answer.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                answer.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Handle window resize for mobile optimization
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9938d175a2f1e791',t:'MTc2MTMwMjAzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
